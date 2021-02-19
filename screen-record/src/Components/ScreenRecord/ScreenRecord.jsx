@@ -27,6 +27,7 @@ function LiveStreamPreview({ stream }) {
 
 export default function ScreenRecord2() {
   const [recordScreen, setRecordScreen] = useState(true);
+  const [action, setAction] = useState('');
   let {
     error,
     status,
@@ -45,20 +46,22 @@ export default function ScreenRecord2() {
     },
     mediaRecorderOptions: {
       mimeType: "video/webm\;codecs=vp9",
-       bitsPerSecond: 128000*8,
-
-    // only for audio track
-    audioBitsPerSecond: 128000*8,
-
-    // only for video track
-    videoBitsPerSecond: 128000*8,
-
-    // used by CanvasRecorder and WhammyRecorder
-    // it is kind of a "frameRate"
-    frameInterval: 90,
+      bitsPerSecond: 128000*8,
+      audioBitsPerSecond: 128000*8,
+      videoBitsPerSecond: 128000*8,
+      frameInterval: 90,
     },
     mediaStreamConstraints: { audio: true, video: true },
   });
+
+  const handlePause = (value) => {
+    setAction(value)
+    if (value === 'pause') {
+      pauseRecording()
+    } else {
+      resumeRecording()
+    }
+  }
 
   return (
     <article style={{textAlign: 'center'}}>
@@ -71,7 +74,7 @@ export default function ScreenRecord2() {
           <span>
             {status}
             <Spin indicator={antIcon} />
-            <Clock/>
+            <Clock action={action}/>
           </span>
           : status}
       </span>
@@ -79,7 +82,8 @@ export default function ScreenRecord2() {
         <button
           type="button"
           onClick={() => {
-            startRecording(1000)
+            startRecording(1000);
+            setAction('')
           }}
           disabled={status === 'recording'}
           style={{
@@ -95,12 +99,14 @@ export default function ScreenRecord2() {
           style={{
             paddingLeft: 10,
             color: status !== 'recording'?
-              'gray' : 'red',
-            borderColor: status !== 'recording'?
-              '' : 'red',
+              'gray'
+              : action === 'pause' ? 'gray':'red',
+            borderColor: status !== 'recording' ?
+              ''
+              : action === 'pause' ? '':'red',
           }}
           type="button"
-          onClick={pauseRecording}
+          onClick={() => handlePause('pause')}
           disabled={status !== 'recording'}
         >
           Pause recording
@@ -108,13 +114,15 @@ export default function ScreenRecord2() {
         <button
           style={{
             paddingLeft: 10,
-            color: status !== 'recording' ?
-              'gray' : 'red',
+            color: status !== 'recording'?
+              'gray'
+              : action === 'resume' ? 'gray':action === 'pause'?'red':'gray',
             borderColor: status !== 'recording' ?
-              '' : 'red',
+              ''
+              : action === 'resume' ? 'gray':action === 'pause'?'red':'',
           }}
           type="button"
-          onClick={resumeRecording}
+          onClick={() => handlePause('resume')}
           disabled={status !== 'recording'}
         >
           Resume recording
@@ -128,7 +136,11 @@ export default function ScreenRecord2() {
               '' : 'red',
           }}
           type="button"
-          onClick={stopRecording}
+          onClick={() =>
+            {stopRecording();
+            setAction('')
+          }
+          }
           disabled={status !== 'recording'}
         >
           Stop recording
@@ -155,7 +167,7 @@ export default function ScreenRecord2() {
       </section>
       <LiveStreamPreview stream={liveStream} />
       {
-        status === 'stopped' && <Player srcBlob={mediaBlob} status={status} />
+        status === 'stopped' && <Player srcBlob={mediaBlob} status={status}  />
       }
     </article>
   );

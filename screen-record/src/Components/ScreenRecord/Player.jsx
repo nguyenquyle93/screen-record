@@ -5,7 +5,7 @@ import { Col, Row } from 'react-flexbox-grid';
 
 
 
-export default function Player({ srcBlob, audio, status }) {
+export default function Player({ srcBlob, audio, status, action }) {
   const [videoList, setVideoList] = useState([]);
   const [data, setData] = useState();
   const [selected, setSelected] = useState([]);
