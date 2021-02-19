@@ -45,6 +45,17 @@ export default function ScreenRecord2() {
     },
     mediaRecorderOptions: {
       mimeType: "video/webm\;codecs=vp9",
+       bitsPerSecond: 128000*8,
+
+    // only for audio track
+    audioBitsPerSecond: 128000*8,
+
+    // only for video track
+    videoBitsPerSecond: 128000*8,
+
+    // used by CanvasRecorder and WhammyRecorder
+    // it is kind of a "frameRate"
+    frameInterval: 90,
     },
     mediaStreamConstraints: { audio: true, video: true },
   });
