@@ -60,7 +60,7 @@ export default function ScreenRecord2() {
           <span>
             {status}
             <Spin indicator={antIcon} />
-            <Clock />
+            <Clock/>
           </span>
           : status}
       </span>
