@@ -21,7 +21,7 @@ function LiveStreamPreview({ stream }) {
     return null;
   }
 
-  return <video ref={videoPreviewRef} width={'100%'} height={'100%'} autoPlay />;
+  return <video ref={videoPreviewRef} width={'50%'} height={'50%'} autoPlay />;
 }
 
 
